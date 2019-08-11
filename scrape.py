@@ -99,13 +99,12 @@ def get_release_id(album, artist, secrets):
     elif len(vmp_copy) > 1:
         return None, 'multiple vmp copies found'
 
-
 if __name__ == '__main__':
     album = 'Left My Blues In San Francisco'
     artist = 'Buddy Guy'
     secrets = json.load(open('secrets.json'))
     release_id, status = get_release_id(album, artist, secrets)
     if release_id:
-        print(' {} here:\n discogs.com/{}-{}/release/{}'.format(status, artist.replace(' ', '-').lower(), album.replace(' ', '-').lower(), release_id))
+        print('\n {} here:\n discogs.com/{}-{}/release/{}'.format(status, artist.replace(' ', '-').lower(), album.replace(' ', '-').lower(), release_id))
     else:
         print(status)
