@@ -106,6 +106,6 @@ if __name__ == '__main__':
     secrets = json.load(open('secrets.json'))
     release_id, status = get_release_id(album, artist, secrets)
     if release_id:
-        print('  {} here:\n  discogs.com/{}-{}/release/{}'.format(status, artist.replace(' ', '-').lower(), album.replace(' ', '-').lower(), release_id))
+        print(' {} here:\n discogs.com/{}-{}/release/{}'.format(status, artist.replace(' ', '-').lower(), album.replace(' ', '-').lower(), release_id))
     else:
         print(status)
