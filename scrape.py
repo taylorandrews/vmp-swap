@@ -7,6 +7,8 @@ import oauth2 as oauth
 from pprint import pprint
 import requests
 from lxml import html
+from selenium import webdriver
+import time
 
 
 def define_variables(secrets):
@@ -121,7 +123,7 @@ def find_prices(releases):
 
     return records
 
-def get_releases(vmp_url, tries=1):
+def get_releases_lxml(vmp_url, tries=1):
     vmp_html =  requests.get(vmp_url)
     tree = html.fromstring(vmp_html.content)
     releases = {}
@@ -145,11 +147,17 @@ def get_releases(vmp_url, tries=1):
 
     return releases
 
+def get_releases_selenium(vmp_url, tries=1):
+    driver = webdriver.Chrome('/usr/local/bin/chromedriver')
+    driver.get(vmp_url)
+    time.sleep(5)
+    return driver
+
 if __name__ == '__main__':
     vmp_url = 'https://app.vinylmeplease.com/records_of_the_month'
     tries = 20
-    releases = get_releases(vmp_url, tries)
-    records = find_prices(releases)
+    releases = get_releases_selenium(vmp_url, tries)
+    # records = find_prices(releases)
 
     # TODO: compare releases dict with number of tries to make sure nothing errors silently!
     #
