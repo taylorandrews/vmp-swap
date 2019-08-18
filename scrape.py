@@ -147,7 +147,10 @@ def get_releases(vmp_url, tries=1):
 
 if __name__ == '__main__':
     vmp_url = 'https://app.vinylmeplease.com/records_of_the_month'
-    tries = 12
+    tries = 20
     releases = get_releases(vmp_url, tries)
     records = find_prices(releases)
+
     # TODO: compare releases dict with number of tries to make sure nothing errors silently!
+    #
+    # Bug: `tries` maxes out at how many albums can load on the vmp page
