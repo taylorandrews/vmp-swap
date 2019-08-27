@@ -7,7 +7,7 @@ import oauth2 as oauth
 from pprint import pprint
 import requests
 from lxml import html
-from selenium import webdriver
+# from selenium import webdriver
 import time
 
 
@@ -67,14 +67,13 @@ def get_ready(secrets):
     return consumer, request_token, oauth_access_token, oauth_access_token_secret, user_agent
 
 def url_ready(words):
-    words.replace(' ', '+')
-    return words
+    words_mastered = words.lower().replace(' ', '+')
+    return words_mastered
 
 def get_release_id(album, artist, secrets):
     consumer, request_token, oauth_access_token, oauth_access_token_secret, user_agent = get_ready(secrets)
     token = oauth.Token(key=oauth_access_token, secret=oauth_access_token_secret)
     client = oauth.Client(consumer, token)
-
     album_mastered = url_ready(album)
     artist_mastered = url_ready(artist)
 
@@ -85,8 +84,11 @@ def get_release_id(album, artist, secrets):
     releases = json.loads(content)
     vmp_copy = []
     for release in releases['results']:
-        if any('Vinyl Me, Please' in lable for lable in release['label']):
+        if any('Vinyl Me, Please' in label for label in release['label']):
             vmp_copy.append(release)
+        elif 'series' in release.keys():
+            if any('Vinyl Me, Please' in series for series in release['series']):
+                vmp_copy.append(release)
     if len(vmp_copy) == 1:
         release_id = vmp_copy[0]['id']
         return release_id, 'vmp copy found'
@@ -124,16 +126,22 @@ def find_prices(releases):
     return records
 
 def get_releases_lxml(vmp_url, tries=1):
-    vmp_html =  requests.get(vmp_url)
+    vmp_html = requests.get(vmp_url)
     tree = html.fromstring(vmp_html.content)
+    print(tree)
     releases = {}
     for n in range(tries):
-        artist_raw = tree.xpath(f'//*[@id="archive"]/div[3]/div[2]/div/div[{n + 1}]/div/div[3]/div[1]/text()')
-        if not artist_raw:
-            artist_raw = tree.xpath(f'//*[@id="archive"]/div[3]/div[2]/div/div[{n + 1}]/div[2]/div[3]/div[1]/text()')
-        album_raw = tree.xpath(f'//*[@id="archive"]/div[3]/div[2]/div/div[{n + 1}]/div/div[3]/div[2]/a/text()')
-        if not album_raw:
-            album_raw = tree.xpath(f'//*[@id="archive"]/div[3]/div[2]/div/div[{n + 1}]/div[2]/div[3]/div[2]/div/text()')
+        artist_raw = tree.xpath(f'//*[@id="swaps"]/div[5]/div[{n + 1}]/div/div/div/div[2]/div/div[1]/div/div[3]/text()')
+        print(artist_raw)
+        # //*[@id="swaps"]/div[5]/div[1]/div/div/div/div[2]/div/div[1]/div/div[3] -- swap page atrist
+        # //*[@id="swaps"]/div[5]/div[2]/div/div/div/div[2]/div/div[1]/div/div[3]
+        # if not artist_raw:
+        #     artist_raw = tree.xpath(f'//*[@id="archive"]/div[3]/div[2]/div/div[{n + 1}]/div[2]/div[3]/div[1]/text()')
+        album_raw = tree.xpath(f'//*[@id="swaps"]/div[5]/div[{n + 1}]/div/div/div/div[2]/div/div[1]/div/div[2]/text()')
+        # //*[@id="swaps"]/div[5]/div[1]/div/div/div/div[2]/div/div[1]/div/div[2] -- swap page album
+        # //*[@id="swaps"]/div[5]/div[2]/div/div/div/div[2]/div/div[1]/div/div[2]
+        # if not album_raw:
+        #     album_raw = tree.xpath(f'//*[@id="archive"]/div[3]/div[2]/div/div[{n + 1}]/div[2]/div[3]/div[2]/div/text()')
         if artist_raw:
             artist_raw[0].strip()
         else:
@@ -154,10 +162,33 @@ def get_releases_selenium(vmp_url, tries=1):
     return driver
 
 if __name__ == '__main__':
-    vmp_url = 'https://app.vinylmeplease.com/records_of_the_month'
+    # vmp_url = 'https://app.vinylmeplease.com/records_of_the_month'
+    vmp_url = 'https://app.vinylmeplease.com/profile/swaps/1869'
     tries = 20
-    releases = get_releases_selenium(vmp_url, tries)
-    # records = find_prices(releases)
+    # releases = get_releases_selenium(vmp_url, tries)
+    # releases = get_releases_lxml(vmp_url, tries)
+    releases = {'Animated Violence Mild': 'BLANCK MASS',
+    'Arthur Moon': 'ARTHUR MOON',
+    'Day Camp for Dreamers': 'EMONIFELA',
+    'Fist City': 'LORETTA LYNN',
+    'forevher': 'SHURA',
+    'KingMaker': 'JOEL ROSS',
+    'Low Grade Buzz': 'HUNTLY',
+    'Miami Memory': 'ALEX CAMERON',
+    'Mulberry Violence': 'TREVOR POWERS',
+    'NEON BROWN': 'VELVET NEGRONI',
+    'North Hills': 'DAWES',
+    'Out There': 'ERIC DOLPHY',
+    'Salt': 'MR. TWIN SISTER'
+    }
+    # ,
+    releases = {'Silver Eater': 'GRACE LIGHTMAN',
+    'Something Like A War': 'KINDNESS',
+    'The Mind of Mannie Fresh': 'MANNIE FRESH',
+    "We're Not Talking": 'THE GOON SAX',
+    "While I'm Livin'": 'TANYA TUCKER',
+    'Your Dog': 'ROSE DROLL'}
+    records = find_prices(releases)
 
     # TODO: compare releases dict with number of tries to make sure nothing errors silently!
     #
