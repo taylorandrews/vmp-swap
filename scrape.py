@@ -161,12 +161,8 @@ def get_releases_selenium(vmp_url, tries=1):
     time.sleep(5)
     return driver
 
-if __name__ == '__main__':
-    # vmp_url = 'https://app.vinylmeplease.com/records_of_the_month'
-    vmp_url = 'https://app.vinylmeplease.com/profile/swaps/1869'
-    tries = 20
-    # releases = get_releases_selenium(vmp_url, tries)
-    # releases = get_releases_lxml(vmp_url, tries)
+def get_releases_raw():
+
     releases = {'Animated Violence Mild': 'BLANCK MASS',
     'Arthur Moon': 'ARTHUR MOON',
     'Day Camp for Dreamers': 'EMONIFELA',
@@ -176,18 +172,88 @@ if __name__ == '__main__':
     'Low Grade Buzz': 'HUNTLY',
     'Miami Memory': 'ALEX CAMERON',
     'Mulberry Violence': 'TREVOR POWERS',
-    'NEON BROWN': 'VELVET NEGRONI',
-    'North Hills': 'DAWES',
+    'NEON BROWN': 'VELVET NEGRONI'}
+
+    releases = {'North Hills': 'DAWES',
     'Out There': 'ERIC DOLPHY',
-    'Salt': 'MR. TWIN SISTER'
-    }
-    # ,
-    releases = {'Silver Eater': 'GRACE LIGHTMAN',
+    'Salt': 'MR. TWIN SISTER',
+    'Silver Eater': 'GRACE LIGHTMAN',
     'Something Like A War': 'KINDNESS',
     'The Mind of Mannie Fresh': 'MANNIE FRESH',
     "We're Not Talking": 'THE GOON SAX',
     "While I'm Livin'": 'TANYA TUCKER',
     'Your Dog': 'ROSE DROLL'}
+
+    # releases = {'A Curious Tale of Trials + Persons': 'LITTLE SIMZ',
+    # 'África Brasil': 'JORGE BEN',
+    # 'All Hail The Queen': 'QUEEN LATIFAH',
+    # 'Aromanticism': 'MOSES SUMNEY',
+    # 'Attica Blues': 'ARCHIE SHEPP',
+    # 'Be The Cowboy': 'MITSKI',
+    # 'Betty Davis': 'BETTY DAVIS',
+    # 'Big Bill Broonzy Sings Folk Songs': 'BIG BILL BROONZY',
+    # 'Call Me': 'AL GREEN',
+    # 'City Music': 'KEVIN MORBY'}
+    #
+    # releases = {'Classic': 'LIVING LEGENDS',
+    # "Coal Miner's Daughter": 'LORETTA LYNN',
+    # 'Cosmogramma': 'FLYING LOTUS',
+    # 'Doggystyle': 'SNOOP DOGG',
+    # 'Energy Control Center': 'THE LIGHTMEN PLUS ONE',
+    # 'Fancy Free': 'DONALD BYRD',
+    # 'For The Sake of the Song': 'TOWNES VAN ZANDT',
+    # 'Free Yourself': 'EXPERIENCE UNLIMITED',
+    # 'Go For Your Guns': 'THE ISLEY BROTHERS',
+    # 'Gospel Train': 'SISTER ROSETTA THARPE'}
+    #
+    # releases = {'Hasabe': 'AYALEW MESFIN',
+    # 'Here To Stay': 'DARRELL BANKS',
+    # 'How To Be A Human Being': 'GLASS ANIMALS',
+    # 'I Got What It Takes': 'KOKO TAYLOR',
+    # 'Journey In Satchidananda': 'ALICE COLTRANE FEAT. PHAROAH SAN...',
+    # 'Jujus Alchemy of the Blues': 'SARAH WEBSTER FABIO',
+    # 'King': 'T.I.',
+    # 'Knock On Wood': 'EDDIE FLOYD',
+    # 'Laugh To Keep From Crying': 'NAT TURNER REBELLION',
+    # 'Let It Die': 'FEIST'}
+    #
+    # releases = {'Long Way Home': 'LåPSLEY',
+    # 'Lord Willin': 'CLIPSE',
+    # 'MASSEDUCTION': 'ST VINCENT',
+    # 'Mavis Staples': 'MAVIS STAPLES',
+    # 'Nasty': 'RICO NASTY',
+    # 'Overgrown': 'IVY SOLE',
+    # 'Return To Cookie Mountain': 'TV ON THE RADIO',
+    # 'Silver Bullets': 'THE SILVERTONES',
+    # 'Soul Makossa': 'LAFAYETTE AFRO ROCK BAND',
+    # 'Soul of a Bell': 'WILLIAM BELL'}
+    #
+    # releases = {'Spaces': 'NILS FRAHM',
+    # 'TA13OO': 'DENZEL CURRY',
+    # 'Tha Carter III': 'LIL WAYNE',
+    # "The Center Won't Hold": 'SLEATER-KINNEY',
+    # 'The Lemon of Pink': 'THE BOOKS',
+    # 'The Lost Paramount Tapes': 'JAMES BOOKER',
+    # 'Unapologetic Art Rap': 'OPEN MIKE EAGLE'}
+    #
+    # releases = {'Uno Dos Tres 1•2•3': 'WILLIE BOBO',
+    # 'Uptown Saturday Night': 'CAMP LO',
+    # 'Veedon Fleece': 'VAN MORRISON',
+    # 'Waiting For Little Milton': 'LITTLE MILTON',
+    # 'Watch Out!': 'WELLS FARGO',
+    # 'Wolfgang Amadeus Phoenix': 'PHOENIX',
+    # 'Yours Conditionally': 'TENNIS'}
+
+    return releases
+
+if __name__ == '__main__':
+    # vmp_url = 'https://app.vinylmeplease.com/records_of_the_month'
+    vmp_url = 'https://app.vinylmeplease.com/profile/swaps/1869'
+    tries = 8
+    # releases = get_releases_selenium(vmp_url, tries)
+    # releases = get_releases_lxml(vmp_url, tries)
+    releases = get_releases_raw()
+
     records = find_prices(releases)
 
     # TODO: compare releases dict with number of tries to make sure nothing errors silently!
